@@ -10,10 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JsonReader {
     public static void main(String[] args) {
@@ -45,7 +42,7 @@ public class JsonReader {
     private static long differenceAvgAndMedianPrice(JSONArray tickets) {
         List<Long> listPrice = new ArrayList<>();
 
-        long averagePrice = 0;
+        long sumPrice = 0;
         int count = 0;
 
         for (Object ticket : tickets) {
@@ -59,9 +56,19 @@ public class JsonReader {
 
             listPrice.add((long) ticketObj.get("price"));
             count++;
-            averagePrice += (long) ticketObj.get("price");
+            sumPrice += (long) ticketObj.get("price");
         }
-        return (count != 0) ? averagePrice / count - listPrice.get(listPrice.size() / 2) : 0;
+
+        return (count != 0) ? averagePrice(sumPrice, count) - medianPrice(listPrice) : 0;
+    }
+
+    private static long averagePrice(long sumPrice, int count) {
+        return sumPrice / count;
+    }
+
+    private static long medianPrice(List<Long> listPrice) {
+        Collections.sort(listPrice);
+        return listPrice.get(listPrice.size() / 2);
     }
 
     private static void minDurationTime(JSONArray tickets, Map<String, Long> minDepartureTime) {
