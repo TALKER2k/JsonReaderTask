@@ -68,7 +68,10 @@ public class JsonReader {
 
     private static long medianPrice(List<Long> listPrice) {
         Collections.sort(listPrice);
-        return listPrice.get(listPrice.size() / 2);
+
+        return (listPrice.size() % 2 == 0) ?
+                (listPrice.get((listPrice.size() / 2)) + listPrice.get((listPrice.size() / 2) - 1)) / 2L
+                : listPrice.get(listPrice.size() / 2);
     }
 
     private static void minDurationTime(JSONArray tickets, Map<String, Long> minDepartureTime) {
